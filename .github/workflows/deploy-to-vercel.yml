@@ -1,0 +1,43 @@
+name: Deploy to Vercel
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install & Build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          # Install Vercel CLI (install is fast in CI)
+          npm i -g vercel@latest || true
+
+          # Build the deploy command to ensure the project name is exactly what you specified
+          DEPLOY_CMD="vercel --token $VERCEL_TOKEN --prod --confirm --name greeshmanth-portfolio --yes"
+          if [ -n "$VERCEL_ORG_ID" ]; then DEPLOY_CMD="$DEPLOY_CMD --org $VERCEL_ORG_ID"; fi
+          if [ -n "$VERCEL_PROJECT_ID" ]; then DEPLOY_CMD="$DEPLOY_CMD --project $VERCEL_PROJECT_ID"; fi
+
+          echo "Running: $DEPLOY_CMD"
+          $DEPLOY_CMD
+
+          echo "Deployment finished; check Vercel dashboard or the action logs for the deployment URL."
