@@ -53,6 +53,6 @@ contactSchema.index({ createdAt: -1 })
 contactSchema.index({ email: 1 })
 contactSchema.index({ status: 1 })
 
-const Contact = mongoose.model('Contact', contactSchema)
+const Contact = mongoose.models.Contact || mongoose.model('Contact', contactSchema)
 
 export default Contact
