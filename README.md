@@ -1,4 +1,4 @@
-# 🌐 Harsha Vardhan Portfolio Website
+# 🌐 Greeshmanth Reddy Portfolio Website
 
 A **Full-Stack Portfolio Website** to showcase my skills, projects, and contact information, built with **React (Vite)** and **Node.js (Express)**.  
 Designed for potential clients, employers, and collaborators.
